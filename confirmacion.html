@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Entrada Validada</title>
+
+<style>
+
+body{
+margin:0;
+height:100vh;
+background:#000;
+display:flex;
+justify-content:center;
+align-items:center;
+font-family:system-ui;
+overflow:hidden;
+color:white;
+}
+
+/* PANTALLA DE CINE */
+
+.pantalla{
+position:relative;
+width:80vw;
+max-width:600px;
+height:320px;
+background:#111;
+border-radius:10px;
+box-shadow:0 0 40px rgba(0,0,0,0.8);
+display:flex;
+justify-content:center;
+align-items:center;
+text-align:center;
+overflow:hidden;
+}
+
+/* CONTENIDO */
+
+.contenido{
+opacity:0;
+animation:aparecer 1s ease forwards;
+animation-delay:2.5s;
+padding:20px;
+}
+
+h1{
+font-size:28px;
+margin-bottom:10px;
+}
+
+p{
+font-size:18px;
+color:#ddd;
+}
+
+/* CORTINAS */
+
+.cortina{
+position:absolute;
+top:0;
+width:50%;
+height:100%;
+background:linear-gradient(
+to right,
+#6b0000,
+#b30000,
+#6b0000
+);
+z-index:5;
+}
+
+.izquierda{
+left:0;
+animation:abrirIzq 2s ease forwards;
+}
+
+.derecha{
+right:0;
+animation:abrirDer 2s ease forwards;
+}
+
+@keyframes abrirIzq{
+to{transform:translateX(-100%)}
+}
+
+@keyframes abrirDer{
+to{transform:translateX(100%)}
+}
+
+/* TEXTO */
+
+@keyframes aparecer{
+from{opacity:0; transform:scale(.8)}
+to{opacity:1; transform:scale(1)}
+}
+
+/* EFECTO PROYECTOR */
+
+.proyector{
+position:absolute;
+top:-80px;
+width:200%;
+height:200px;
+background:radial-gradient(circle,rgba(255,255,200,0.25),transparent 70%);
+animation:proyector 3s infinite alternate;
+}
+
+@keyframes proyector{
+from{opacity:.2}
+to{opacity:.6}
+}
+
+</style>
+</head>
+
+<body>
+
+    <audio id="sonidoProyector" autoplay>
+<source src="proyector.mp3" type="audio/mpeg">
+</audio>
+
+<div class="pantalla">
+
+<div class="proyector"></div>
+
+<div class="cortina izquierda"></div>
+<div class="cortina derecha"></div>
+
+<div class="contenido">
+
+<h1>🎬 Entrada Validada</h1>
+
+<p>Tu cita con Freddy está confirmada 🍿</p>
+
+<p>Prepárate para una buena película 😉</p>
+
+</div>
+
+</div>
+<script>
+
+window.addEventListener("load", ()=>{
+
+const sonido = document.getElementById("sonidoProyector");
+
+sonido.volume = 0.6;
+
+sonido.play().catch(()=>{});
+
+});
+
+</script>
+</body>
+</html>

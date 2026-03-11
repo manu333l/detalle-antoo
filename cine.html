@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Una pregunta para ti</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<style>
+
+:root{ --color-cine:#ff6b81; }
+
+body{
+margin:0;
+padding:0;
+height:100dvh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(135deg,#ffd6e0,#ffe8f0);
+font-family:-apple-system,system-ui,sans-serif;
+text-align:center;
+overflow:hidden;
+}
+
+/* CLAQUETA */
+
+.clapper-container{
+position:absolute;
+display:flex;
+flex-direction:column;
+align-items:center;
+animation:fadeOut .8s ease forwards;
+animation-delay:2.5s;
+z-index:100;
+}
+
+.clapper{
+width:140px;
+height:90px;
+background:#222;
+border-radius:10px;
+position:relative;
+}
+
+.top{
+width:140px;
+height:25px;
+background:repeating-linear-gradient(45deg,white,white 15px,black 15px,black 30px);
+position:absolute;
+top:-12px;
+left:0;
+transform-origin:left bottom;
+animation:clap .8s ease infinite;
+border-radius:5px;
+}
+
+@keyframes clap{
+0%,100%{transform:rotate(0)}
+50%{transform:rotate(-35deg)}
+}
+
+@keyframes fadeOut{
+to{opacity:0;visibility:hidden}
+}
+
+/* CONTENIDO */
+
+.container{
+display:none;
+background:white;
+padding:30px 20px;
+border-radius:30px;
+box-shadow:0 20px 40px rgba(0,0,0,.12);
+width:88%;
+max-width:330px;
+z-index:2;
+animation:fadeIn .6s ease;
+}
+
+@keyframes fadeIn{
+from{opacity:0;transform:translateY(20px)}
+to{opacity:1;transform:translateY(0)}
+}
+
+.botones{
+margin-top:20px;
+position:relative;
+height:180px;
+width:100%;
+}
+
+button{
+padding:14px 28px;
+border:none;
+border-radius:16px;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+position:absolute;
+}
+
+#si{
+background:var(--color-cine);
+color:white;
+top:40%;
+left:15%;
+}
+
+#no{
+background:#f0f0f0;
+color:#888;
+top:40%;
+right:15%;
+}
+
+/* TICKET */
+
+#ticket{
+display:none;
+position:relative;
+margin:15px auto 0;
+width:260px;
+background:#fff8dc;
+border-radius:12px;
+padding:15px;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+border:2px dashed #444;
+animation:ticketAnim .8s cubic-bezier(.175,.885,.32,1.275);
+}
+
+@keyframes ticketAnim{
+0%{transform:scale(.3) rotate(-10deg);opacity:0}
+100%{transform:scale(1) rotate(0);opacity:1}
+}
+
+.perforacion{
+position:absolute;
+width:20px;
+height:20px;
+background:white;
+border-radius:50%;
+top:50%;
+transform:translateY(-50%);
+}
+
+.izquierda{left:-11px}
+.derecha{right:-11px}
+
+/* QR */
+
+.qr-container{
+position:relative;
+width:120px;
+height:120px;
+margin:12px auto;
+background:white;
+border-radius:10px;
+border:2px solid #eee;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+#qr{
+width:100px;
+height:100px;
+}
+
+.scan-line{
+position:absolute;
+left:0;
+right:0;
+height:2px;
+background:#00ff8c;
+box-shadow:0 0 8px #00ff8c;
+animation:scanQR 2s linear infinite;
+}
+
+@keyframes scanQR{
+0%{top:10px}
+100%{top:110px}
+}
+
+#mensaje{
+margin-top:15px;
+font-size:1.1rem;
+color:#ff6b81;
+font-weight:bold;
+}
+
+/* PALOMITAS */
+
+.popcorn{
+position:absolute;
+font-size:25px;
+z-index:1;
+animation:caer linear infinite;
+pointer-events:none;
+}
+
+@keyframes caer{
+0%{transform:translateY(-10vh)}
+100%{transform:translateY(110vh)}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="clapper-container" id="claqueta">
+<div class="clapper"><div class="top"></div></div>
+<p style="color:#555;font-weight:bold;margin-top:15px;">
+Preparando el estreno... 🎬
+</p>
+</div>
+
+<div class="container" id="contenido">
+
+<h2 id="titulo">Antonella, ¿quieres ir al cine conmigo? 🎬🍿</h2>
+
+<div class="botones" id="areaBotones">
+<button id="si" onclick="aceptar()">Sí 😊</button>
+<button id="no">No 😅</button>
+</div>
+
+<div id="ticket">
+
+<div class="perforacion izquierda"></div>
+<div class="perforacion derecha"></div>
+
+<div class="ticket-contenido">
+
+<h3 style="margin:0;color:#444;font-size:1.1rem;">🎬 Movie Ticket</h3>
+
+<p style="margin:5px 0;font-size:.9rem;"><strong>Para:</strong> Antonella</p>
+<p style="margin:5px 0;font-size:.9rem;"><strong>Con:</strong> Freddy</p>
+
+<div class="qr-container">
+<div class="scan-line"></div>
+<div id="qr"></div>
+</div>
+
+<p style="font-size:.7rem;color:#888;margin:0;">ESCANEAME</p>
+
+</div>
+
+</div>
+
+<div id="mensaje"></div>
+
+</div>
+
+<script>
+
+function generarQR(){
+
+const qrDiv=document.getElementById("qr");
+
+qrDiv.innerHTML="";
+
+new QRCode(qrDiv,{
+text:"confirmacion.html",
+width:100,
+height:100,
+colorDark:"#000000",
+colorLight:"#ffffff",
+correctLevel:QRCode.CorrectLevel.H
+});
+
+}
+
+/* claqueta */
+
+setTimeout(()=>{
+document.getElementById("claqueta").style.display="none";
+document.getElementById("contenido").style.display="block";
+iniciarPalomitas();
+},3200);
+
+/* botón NO que escapa */
+
+const botonNo=document.getElementById("no");
+const area=document.getElementById("areaBotones");
+
+botonNo.addEventListener("touchstart",(e)=>{
+e.preventDefault();
+moverBoton();
+});
+
+botonNo.addEventListener("mouseover",moverBoton);
+
+function moverBoton(){
+
+const anchoArea=area.offsetWidth;
+const altoArea=area.offsetHeight;
+
+const anchoBoton=botonNo.offsetWidth;
+const altoBoton=botonNo.offsetHeight;
+
+let x=Math.random()*(anchoArea-anchoBoton);
+let y=Math.random()*(altoArea-altoBoton);
+
+botonNo.style.left=x+"px";
+botonNo.style.top=y+"px";
+
+}
+
+/* aceptar */
+
+function aceptar(){
+
+document.getElementById("areaBotones").style.display="none";
+document.getElementById("titulo").style.display="none";
+
+document.getElementById("mensaje").innerHTML=
+"¡Esoooo! 😌🍿<br>Entonces tenemos cita.";
+
+const ticket=document.getElementById("ticket");
+
+ticket.style.display="block";
+
+setTimeout(()=>{
+generarQR();
+},200);
+
+}
+
+/* palomitas */
+
+function iniciarPalomitas(){
+
+setInterval(()=>{
+
+const p=document.createElement("div");
+
+p.classList.add("popcorn");
+
+p.innerHTML="🍿";
+
+p.style.left=Math.random()*100+"vw";
+
+p.style.animationDuration=(Math.random()*2+3)+"s";
+
+document.body.appendChild(p);
+
+setTimeout(()=>p.remove(),4000);
+
+},600);
+
+}
+
+</script>
+
+</body>
+</html>
